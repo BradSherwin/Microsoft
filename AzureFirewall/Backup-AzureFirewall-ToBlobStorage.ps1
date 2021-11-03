@@ -23,12 +23,10 @@
 .OUTPUTS
 	Human-readable informational and error messages produced during the job. Not intended to be consumed by another runbook.
 .NOTES
-    ORIGINAL AUTHOR: Francesco Molfese
-    LASTEDIT: Sep 09, 2021 
-    VERSION: 3.0
+  
 
     CHANGE LOG:
-    02/11/21 Brad Sherwin: Added Firewall POlicy as orginal script missed it
+    02/11/21 Brad SHerwin: Added Firewall Policy as orginal script missed it
 #>
 
 param(
@@ -101,14 +99,14 @@ function ExportFirewall-To-Blob-Storage([string]$resourceGroupName, [string]$Azu
 }
 
 function ExportFirewallPolicy-To-Blob-Storage([string]$resourceGroupName, [string]$AzureFirewallName, [string]$storageKey, [string]$blobContainerName,$storageContext) {
-	Write-Verbose "Starting Azure Firewall export" -Verbose
+	Write-Verbose "Starting Azure Firewall Policy export" -Verbose
     
     $BackupFilename = $AzureFirewallPolicyName + (Get-Date).ToString("yyyyMMddHHmm") + ".json"
     $BackupFilePath = ($env:TEMP + "\" + $BackupFilename)
-    $AzureFirewallPolicyId = (Get-AzFirewall -Name $AzureFirewallPolicyName -ResourceGroupName $resourceGroupName).id
+    $AzureFirewallPolicyId = (Get-AzFirewallPolicy -Name $AzureFirewallPolicyName -ResourceGroupName $resourceGroupName).id
     Export-AzResourceGroup -ResourceGroupName $resourceGroupName -Resource $AzureFirewallPolicyId -SkipAllParameterization -Path $BackupFilePath
 
-    Write-Output "Creating request to copy Azure Firewall configuration"
+    Write-Output "Creating request to copy Azure Firewall Policy configuration"
     $blobname = $BackupFilename
     $output = Set-AzStorageBlobContent -File $BackupFilePath -Blob $blobname -Container $blobContainerName -Context $storageContext -Force -ErrorAction SilentlyContinue
 
@@ -127,6 +125,8 @@ function Delete-Old-Backups([int]$retentionDays, [string]$blobContainerName, $st
 Write-Verbose "Starting database backup" -Verbose
 
 $StorageContext = New-AzStorageContext -StorageAccountName $storageAccountName -StorageAccountKey $storageKey
+
+
 
 Login
 Import-Module Az.Network
