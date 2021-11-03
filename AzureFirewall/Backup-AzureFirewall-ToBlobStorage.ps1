@@ -33,7 +33,7 @@
   
 
     CHANGE LOG:
-    02/11/21 Brad SHerwin: Added Firewall Policy as orginal script missed it
+    02/11/21 Brad Sherwin: Added Firewall Policy as original script missed it
 #>
 
 param(
