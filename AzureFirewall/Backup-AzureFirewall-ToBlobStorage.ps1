@@ -11,15 +11,22 @@
 .PARAMETER AzureFirewallName
 	Specifies the name of the Azure Firewall which script will backup
 	
+.PARAMETER AzureFirewallPolicyName
+	Specifies the name of the Azure Firewall Policy which script will backup
+	
 .PARAMETER StorageAccountName
 	Specifies the name of the storage account where backup file will be uploaded
+	
 .PARAMETER StorageKey
 	Specifies the storage key of the storage account
+	
 .PARAMETER BlobContainerName
 	Specifies the container name of the storage account where backup file will be uploaded. Container will be created if it does not exist.
+	
 .PARAMETER RetentionDays
 	Specifies the number of days how long backups are kept in blob storage. Script will remove all older files from container. 
 	For this reason dedicated container must be only used for this script.
+	
 .OUTPUTS
 	Human-readable informational and error messages produced during the job. Not intended to be consumed by another runbook.
 .NOTES
@@ -98,7 +105,7 @@ function ExportFirewall-To-Blob-Storage([string]$resourceGroupName, [string]$Azu
 
 }
 
-function ExportFirewallPolicy-To-Blob-Storage([string]$resourceGroupName, [string]$AzureFirewallName, [string]$storageKey, [string]$blobContainerName,$storageContext) {
+function ExportFirewallPolicy-To-Blob-Storage([string]$resourceGroupName, [string]$AzureFirewallPolicyName, [string]$storageKey, [string]$blobContainerName,$storageContext) {
 	Write-Verbose "Starting Azure Firewall Policy export" -Verbose
     
     $BackupFilename = $AzureFirewallPolicyName + (Get-Date).ToString("yyyyMMddHHmm") + ".json"
